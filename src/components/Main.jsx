@@ -1,20 +1,21 @@
 import React, { useState, useEffect, } from 'react';
 import { Container, Row, Col, Table, } from 'react-bootstrap';
-import Slider from './Slider';
+import Slider from './HorizontalSlider';
 
 import CONST from '../constants';
 import { format, createMonthlyNoInterest, } from '../logic/currency';
 import { twoDecimals, toYears, } from '../logic/number';
 
+import { BarChart, Bar, XAxis, YAxis, Tooltip, } from 'recharts';
 
 const DataRow = props => {
-  const { period, fee, left, soFar } = props;
+  const { period, fee, left, paid } = props;
   return (
     <tr>
       <td>{period}</td>
       <td>{format(fee)}</td>
       <td>{format(left)}</td>
-      <td>{format(soFar)}</td>
+      <td>{format(paid)}</td>
     </tr>
   )
 };
@@ -25,7 +26,7 @@ const DataTable = props => {
       period={e.period}
       fee={e.fee}
       left={e.left}
-      soFar={e.soFar}
+      paid={e.paid}
     />
   );
 
@@ -47,7 +48,19 @@ const Main = () => {
   return (
     <Container>
       <Row>
-        <Col>1 of 1</Col>
+        <Col>
+          <BarChart width={800} height={450} data={monthly}>
+            <XAxis dataKey="period" stroke="#8884d8" />
+            <YAxis dataKey="paid" />
+            <Tooltip />
+            <Bar
+              type="monotone"
+              dataKey="paid"
+              fill="#8884d8"
+              barSize={30}
+            />
+          </BarChart>
+        </Col>
       </Row>
       <Row>
         <Col>
